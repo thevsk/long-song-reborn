@@ -15,7 +15,6 @@ public class FuckService implements IMessageService {
 
     @Override
     public void groupMessage(GroupMessageEvent event, ApiSender sender) {
-        if (!EventUtils.groupIdIn(event, 586135799L, 740751782L, 524888663L)) return;
         if (!EventUtils.startsWith(event, "草")) return;
         Long qq = EventUtils.getAt0(event);
         if (qq == null) return;

@@ -25,14 +25,13 @@ public class FuckRandomService implements IMessageService {
 
     @Override
     public void groupMessage(GroupMessageEvent event, ApiSender sender) {
-        if (!EventUtils.groupIdIn(event, 586135799L, 740751782L, 524888663L)) return;
         if (!EventUtils.equals(event, "草群友")) return;
         if (cache.get(event.getGroupId()) == null) {
             JSONArray groupMemberList = sender.getGroupMemberList(event.getGroupId()).getJSONArray("data");
             List<JSONObject> list = new ArrayList<>();
             for (int i = 0; i < groupMemberList.size(); i++) {
                 JSONObject object = groupMemberList.getJSONObject(i);
-                if (object.getInteger("last_sent_time") < TimeUtils.date3daysAgo()) continue;
+                if (object.getInteger("last_sent_time") < TimeUtils.dateNDaysAgo(30)) continue;
                 list.add(object);
             }
             cache.put(event.getGroupId(), list);
