@@ -25,7 +25,7 @@ public class FuckService implements IMessageService {
                 StrUtil.isBlank(groupMemberInfo.getString("card")) ?
                         groupMemberInfo.getString("nickname") :
                         groupMemberInfo.getString("card");
-        String image = "https://q1.qlogo.cn/g?b=qq&nk=" + qq + "&s=100";
+        String image = "https://q1.qlogo.cn/g?b=qq&nk=" + qq + "&s=640";
         sender.sendGroupMsg(
                 event.getGroupId(),
                 new Message()
