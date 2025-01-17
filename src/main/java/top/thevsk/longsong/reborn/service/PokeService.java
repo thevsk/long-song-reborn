@@ -7,13 +7,11 @@ import top.thevsk.longsong.reborn.entity.sender.array.ArrayMessage;
 import top.thevsk.longsong.reborn.enums.ArrayMessageType;
 import top.thevsk.longsong.reborn.sender.ApiSender;
 import top.thevsk.longsong.reborn.service.interfaces.INoticeService;
-import top.thevsk.longsong.reborn.utils.EventUtils;
 
 @Service
 public class PokeService implements INoticeService {
     @Override
     public void pokeNotice(PokeNoticeEvent event, ApiSender sender) {
-        if (!EventUtils.groupIdIn(event, 586135799L, 740751782L, 524888663L)) return;
         if (!event.getTargetId().equals(event.getSelfId())) return;
         sender.sendGroupMsg(
                 event.getGroupId(),
