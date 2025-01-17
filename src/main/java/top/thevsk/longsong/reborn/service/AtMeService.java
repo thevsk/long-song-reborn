@@ -14,7 +14,7 @@ public class AtMeService implements IMessageService {
 
     @Override
     public void groupMessage(GroupMessageEvent event, ApiSender sender) {
-        if (!EventUtils.groupIdIn(event, 586135799L, 740751782L)) return;
+        if (!EventUtils.groupIdIn(event, 586135799L, 740751782L, 524888663L)) return;
         if (!EventUtils.atMe(event)) return;
         sender.sendGroupMsg(
                 event.getGroupId(),

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import top.thevsk.longsong.reborn.entity.event.message.GroupMessageEvent;
 import top.thevsk.longsong.reborn.entity.sender.Message;
 import top.thevsk.longsong.reborn.entity.sender.array.ArrayMessage;
-import top.thevsk.longsong.reborn.enums.ArrayMessageType;
 import top.thevsk.longsong.reborn.sender.ApiSender;
 import top.thevsk.longsong.reborn.service.interfaces.IMessageService;
 import top.thevsk.longsong.reborn.utils.EventUtils;
@@ -26,7 +25,7 @@ public class FuckRandomService implements IMessageService {
 
     @Override
     public void groupMessage(GroupMessageEvent event, ApiSender sender) {
-        if (!EventUtils.groupIdIn(event, 586135799L, 740751782L)) return;
+        if (!EventUtils.groupIdIn(event, 586135799L, 740751782L, 524888663L)) return;
         if (!EventUtils.equals(event, "草群友")) return;
         if (cache.get(event.getGroupId()) == null) {
             JSONArray groupMemberList = sender.getGroupMemberList(event.getGroupId()).getJSONArray("data");
