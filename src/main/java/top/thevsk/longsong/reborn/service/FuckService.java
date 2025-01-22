@@ -18,6 +18,15 @@ public class FuckService implements IMessageService {
         if (!EventUtils.startsWith(event, "草")) return;
         Long qq = EventUtils.getAt0(event);
         if (qq == null) return;
+        if (qq.equals(event.getSelfId())) {
+            sender.sendGroupMsg(
+                    event.getGroupId(),
+                    new Message()
+                            .addMsg(ArrayMessage.reply(event))
+                            .addMsg(ArrayMessage.localImage("0.jpg"))
+            );
+            return;
+        }
         JSONObject groupMemberInfo = sender.getGroupMemberInfo(event.getGroupId(), qq).getJSONObject("data");
         if (groupMemberInfo == null) return;
         String name =

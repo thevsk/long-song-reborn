@@ -7,9 +7,11 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import top.thevsk.longsong.reborn.entity.BotException;
 import top.thevsk.longsong.reborn.entity.sender.Message;
+import top.thevsk.longsong.reborn.entity.sender.array.ArrayMessage;
 import top.thevsk.longsong.reborn.utils.HttpUtils;
 
 import java.util.concurrent.TimeUnit;
@@ -17,6 +19,11 @@ import java.util.concurrent.TimeUnit;
 @Component
 @Slf4j
 public class ApiSender {
+
+    @Value("${onebot.server}")
+    private String onebotServer;
+    @Value("${material.web-path}")
+    private String webPath;
 
     public JSONObject getGroupMemberInfo(Long groupId, Long userId) {
         JSONObject data = new JSONObject();
@@ -32,10 +39,20 @@ public class ApiSender {
     }
 
     public void sendGroupMsg(Long groupId, Message message) {
+        replaceMessage(message);
         JSONObject data = new JSONObject();
         data.put("group_id", groupId);
         data.put("message", message.getMsg());
         send("send_group_msg", data);
+    }
+
+    private void replaceMessage(Message message) {
+        for (ArrayMessage arrayMessage : message.getMsg()) {
+            if (arrayMessage.getData() instanceof ArrayMessage.Image) {
+                ArrayMessage.Image data = (ArrayMessage.Image) arrayMessage.getData();
+                data.setFile(data.getFile().replace("*WEB_PATH*", webPath));
+            }
+        }
     }
 
     private JSONObject send(String action, JSONObject data) {
@@ -43,7 +60,7 @@ public class ApiSender {
         log.info("[发送消息] data {} ", data.toString());
         MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
         Request request = new Request.Builder()
-                .url("http://192.168.1.132:12300/" + action)
+                .url(onebotServer + "/" + action)
                 .post(RequestBody.create(mediaType, data.toString()))
                 .build();
         OkHttpClient client = new OkHttpClient.Builder()
