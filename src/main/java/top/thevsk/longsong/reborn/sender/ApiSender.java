@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import top.thevsk.longsong.reborn.entity.BotException;
 import top.thevsk.longsong.reborn.entity.sender.Message;
-import top.thevsk.longsong.reborn.entity.sender.array.ArrayMessage;
 import top.thevsk.longsong.reborn.utils.HttpUtils;
 
 import java.util.concurrent.TimeUnit;
@@ -22,8 +21,14 @@ public class ApiSender {
 
     @Value("${onebot.server}")
     private String onebotServer;
-    @Value("${material.web-path}")
-    private String webPath;
+
+    public String getGroupMemberName(Long groupId, Long userId) {
+        JSONObject groupMemberInfo = getGroupMemberInfo(groupId, userId).getJSONObject("data");
+        if (groupMemberInfo == null) return null;
+        return StrUtil.isBlank(groupMemberInfo.getString("card")) ?
+                groupMemberInfo.getString("nickname") :
+                groupMemberInfo.getString("card");
+    }
 
     public JSONObject getGroupMemberInfo(Long groupId, Long userId) {
         JSONObject data = new JSONObject();
@@ -39,20 +44,10 @@ public class ApiSender {
     }
 
     public void sendGroupMsg(Long groupId, Message message) {
-        replaceMessage(message);
         JSONObject data = new JSONObject();
         data.put("group_id", groupId);
         data.put("message", message.getMsg());
         send("send_group_msg", data);
-    }
-
-    private void replaceMessage(Message message) {
-        for (ArrayMessage arrayMessage : message.getMsg()) {
-            if (arrayMessage.getData() instanceof ArrayMessage.Image) {
-                ArrayMessage.Image data = (ArrayMessage.Image) arrayMessage.getData();
-                data.setFile(data.getFile().replace("*WEB_PATH*", webPath));
-            }
-        }
     }
 
     private JSONObject send(String action, JSONObject data) {

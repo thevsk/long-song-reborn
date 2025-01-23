@@ -6,7 +6,6 @@ import com.alibaba.fastjson2.JSONObject;
 import org.springframework.stereotype.Service;
 import top.thevsk.longsong.reborn.entity.event.message.GroupMessageEvent;
 import top.thevsk.longsong.reborn.entity.sender.Message;
-import top.thevsk.longsong.reborn.entity.sender.array.ArrayMessage;
 import top.thevsk.longsong.reborn.sender.ApiSender;
 import top.thevsk.longsong.reborn.service.interfaces.IMessageService;
 import top.thevsk.longsong.reborn.utils.EventUtils;
@@ -19,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class FuckRandomService implements IMessageService {
+public class FuckRandomService extends BaseService implements IMessageService {
 
     private Map<Long, List<JSONObject>> cache = new HashMap<>();
 
@@ -43,14 +42,13 @@ public class FuckRandomService implements IMessageService {
                 StrUtil.isBlank(cache.get(event.getGroupId()).get(random).getString("card")) ?
                         cache.get(event.getGroupId()).get(random).getString("nickname") :
                         cache.get(event.getGroupId()).get(random).getString("card");
-        String qq = cache.get(event.getGroupId()).get(random).getString("user_id");
-        String image = "https://q1.qlogo.cn/g?b=qq&nk=" + qq + "&s=640";
+        Long qq = Long.valueOf(cache.get(event.getGroupId()).get(random).getString("user_id"));
         sender.sendGroupMsg(
                 event.getGroupId(),
                 new Message()
-                        .addMsg(ArrayMessage.reply(event))
-                        .addMsg(ArrayMessage.text("成功草到了 " + name + "(" + qq + ")"))
-                        .addMsg(ArrayMessage.image(image))
+                        .addMsg(reply(event))
+                        .addMsg(text("成功草到了 " + name + "(" + qq + ")"))
+                        .addMsg(image(faceImage(qq)))
         );
     }
 }

@@ -8,13 +8,22 @@ import top.thevsk.longsong.reborn.enums.ArrayMessageType;
 
 public class EventUtils {
 
-    public static boolean startsWith(MessageEvent event, String token) {
-        if (event.getMessage().size() > 1) {
-            if (event.getMessage().get(0).getType().equals(ArrayMessageType.text)) {
-                return event.getMessage().get(0).getData().getString("text").startsWith(token);
+    public static String getImage0(MessageEvent event) {
+        for (ArrayMessage arrayMessage : event.getMessage()) {
+            if (arrayMessage.getType().equals(ArrayMessageType.image)) {
+                return arrayMessage.getData().getString("url");
             }
         }
-        return false;
+        return null;
+    }
+
+    public static String getText0(MessageEvent event) {
+        for (ArrayMessage arrayMessage : event.getMessage()) {
+            if (arrayMessage.getType().equals(ArrayMessageType.text)) {
+                return arrayMessage.getData().getString("text");
+            }
+        }
+        return null;
     }
 
     public static Long getAt0(MessageEvent event) {
@@ -26,10 +35,46 @@ public class EventUtils {
         return null;
     }
 
+    public static boolean startsWith(MessageEvent event, String token) {
+        if (event.getMessage().size() > 0) {
+            if (event.getMessage().get(0).getType().equals(ArrayMessageType.text)) {
+                return event.getMessage().get(0).getData().getString("text").startsWith(token);
+            }
+        }
+        return false;
+    }
+
     public static boolean equals(MessageEvent event, String token) {
         if (event.getMessage().size() == 1) {
             if (event.getMessage().get(0).getType().equals(ArrayMessageType.text)) {
                 return event.getMessage().get(0).getData().getString("text").equals(token);
+            }
+        }
+        return false;
+    }
+
+    public static Integer getReply(MessageEvent event) {
+        for (ArrayMessage arrayMessage : event.getMessage()) {
+            if (arrayMessage.getType().equals(ArrayMessageType.reply)) {
+                return Integer.valueOf(arrayMessage.getData().getString("id"));
+            }
+        }
+        return null;
+    }
+
+    public static boolean isReply(MessageEvent event) {
+        if (event.getMessage().size() > 0) {
+            return event.getMessage().get(0).getType().equals(ArrayMessageType.reply);
+        }
+        return false;
+    }
+
+    public static boolean containsEquals(MessageEvent event, String token) {
+        for (ArrayMessage arrayMessage : event.getMessage()) {
+            if (arrayMessage.getType().equals(ArrayMessageType.text)) {
+                if (arrayMessage.getData().getString("text").trim().equals(token)) {
+                    return true;
+                }
             }
         }
         return false;

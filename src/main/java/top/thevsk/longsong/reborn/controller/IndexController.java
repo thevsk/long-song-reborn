@@ -3,6 +3,7 @@ package top.thevsk.longsong.reborn.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import top.thevsk.longsong.reborn.entity.Cache;
 import top.thevsk.longsong.reborn.entity.event.Event;
 import top.thevsk.longsong.reborn.entity.event.message.GroupMessageEvent;
 import top.thevsk.longsong.reborn.entity.event.message.MessageEvent;
@@ -43,6 +44,7 @@ public class IndexController {
         if (event instanceof MessageEvent) {
             for (IMessageService iMessageService : serviceBeanUtils.getMessageServiceList()) {
                 if (event instanceof GroupMessageEvent) {
+                    Cache.setGroupMessage((GroupMessageEvent) event);
                     iMessageService.groupMessage((GroupMessageEvent) event, apiSender);
                 } else if (event instanceof PrivateMessageEvent) {
                     iMessageService.privateMessage((PrivateMessageEvent) event, apiSender);

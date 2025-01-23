@@ -11,11 +11,14 @@ import java.io.File;
 public class MaterialConfig extends WebMvcConfigurationSupport {
 
     @Value("${material.local-path}")
-    private String materialPath;
+    private String localPath;
+    @Value("${material.temp-path}")
+    private String tempPath;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("material/**").addResourceLocations("file:" + materialPath + File.separator);
+        registry.addResourceHandler("local/**").addResourceLocations("file:" + localPath + File.separator);
+        registry.addResourceHandler("temp/**").addResourceLocations("file:" + tempPath + File.separator);
         super.addResourceHandlers(registry);
     }
 }
