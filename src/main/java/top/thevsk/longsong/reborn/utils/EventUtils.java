@@ -38,10 +38,23 @@ public class EventUtils {
     public static boolean startsWith(MessageEvent event, String token) {
         if (event.getMessage().size() > 0) {
             if (event.getMessage().get(0).getType().equals(ArrayMessageType.text)) {
-                return event.getMessage().get(0).getData().getString("text").startsWith(token);
+                return event.getMessage().get(0).getData().getString("text").trim().startsWith(token);
             }
         }
         return false;
+    }
+
+    public static String startsWithIn(MessageEvent event, Iterable<String> tokens) {
+        for (String token : tokens) {
+            if (event.getMessage().size() > 0) {
+                if (event.getMessage().get(0).getType().equals(ArrayMessageType.text)) {
+                    if (event.getMessage().get(0).getData().getString("text").trim().startsWith(token)) {
+                        return token;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     public static boolean equals(MessageEvent event, String token) {

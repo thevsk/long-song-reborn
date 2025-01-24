@@ -32,49 +32,23 @@ public class BaseMemeService extends BaseService {
         return send("do", new File[]{downloadFaceImage(qq1), downloadFaceImage(qq2)}, null, null);
     }
 
-    String canCanNeedQQ(Long qq1, Long qq2) {
-        return send("can_can_need", new File[]{downloadFaceImage(qq1), downloadFaceImage(qq2)}, null, null);
-    }
-
-    String beheadQQ(Long qq) {
-        return send("behead", new File[]{downloadFaceImage(qq)}, null, null);
+    String do2QQ(Long qq1, Long qq2) {
+        return send("little_do", new File[]{downloadFaceImage(qq1), downloadFaceImage(qq2)}, null, null);
     }
 
     String empathyQQ(Long qq) {
         return send("empathy", new File[]{downloadFaceImage(qq)}, null, null);
     }
 
-    String petPetQQ(Long qq) {
-        return send("petpet", new File[]{downloadFaceImage(qq)}, null, new JSONObject() {{
-            put("circle", "true");
-        }});
-    }
-
-    String prprQQ(Long qq) {
-        return send("prpr", new File[]{downloadFaceImage(qq)}, null, null);
-    }
-
-    String shootQQ(Long qq) {
-        return send("shoot", new File[]{downloadFaceImage(qq)}, null, null);
+    String shootFile(File file) {
+        return send("shoot", new File[]{file}, null, null);
     }
 
     String startQQ(Long qq, String texts) {
         return send("genshin_start", new File[]{downloadFaceImage(qq)}, texts, null);
     }
 
-    String marriageQQ(Long qq) {
-        return send("marriage", new File[]{downloadFaceImage(qq)}, null, null);
-    }
-
-    String divorceQQ(Long qq) {
-        return send("divorce", new File[]{downloadFaceImage(qq)}, null, null);
-    }
-
-    String eatQQ(Long qq) {
-        return send("eat", new File[]{downloadFaceImage(qq)}, null, null);
-    }
-
-    private String send(String action, File[] files, String texts, JSONObject args) {
+    String send(String action, File[] files, String texts, JSONObject args) {
         MultipartBody.Builder body = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM);
         if (files != null && files.length > 0) {
