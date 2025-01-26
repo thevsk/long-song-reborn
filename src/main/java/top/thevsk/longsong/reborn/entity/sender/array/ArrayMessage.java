@@ -3,6 +3,8 @@ package top.thevsk.longsong.reborn.entity.sender.array;
 import lombok.AllArgsConstructor;
 import top.thevsk.longsong.reborn.enums.ArrayMessageType;
 
+import java.util.List;
+
 @lombok.Data
 public class ArrayMessage {
 
@@ -35,5 +37,19 @@ public class ArrayMessage {
     @AllArgsConstructor
     public static class Reply extends Data {
         private Integer id;
+    }
+
+    @lombok.Data
+    @AllArgsConstructor
+    public static class Forward extends Data {
+        private List<FakeNode> content;
+    }
+
+    @lombok.Data
+    @AllArgsConstructor
+    public static class FakeNode extends Data {
+        private Long userId;
+        private String nickname;
+        private List<ArrayMessage> content;
     }
 }

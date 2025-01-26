@@ -22,6 +22,16 @@ public class ApiSender {
     @Value("${onebot.server}")
     private String onebotServer;
 
+    private String selfNickname = "";
+
+    public String getSelfNickname() {
+        if (selfNickname == null) {
+            JSONObject loginInfo = send("get_login_info", new JSONObject());
+            selfNickname = loginInfo.getJSONObject("data").getString("nickname");
+        }
+        return selfNickname;
+    }
+
     public String getGroupMemberName(Long groupId, Long userId) {
         JSONObject groupMemberInfo = getGroupMemberInfo(groupId, userId).getJSONObject("data");
         if (groupMemberInfo == null) return null;
@@ -50,6 +60,13 @@ public class ApiSender {
         send("send_group_msg", data);
     }
 
+    public void sendGroupForwardMsg(Long groupId, Message message) {
+        JSONObject data = new JSONObject();
+        data.put("group_id", groupId);
+        data.put("messages", message.getMsg());
+        send("send_forward_msg", data);
+    }
+
     private JSONObject send(String action, JSONObject data) {
         log.info("[发送消息] action {} ", action);
         log.info("[发送消息] data {} ", data.toString());
@@ -71,7 +88,7 @@ public class ApiSender {
         JSONObject result = JSONObject.parse(strResult);
         String status = result.getString("status");
         if ("failed".equals(status)) {
-            throw new BotException("sender 发送消息失败");
+            throw new BotException("sender 发送消息失败：" + strResult);
         }
         return result;
     }

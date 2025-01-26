@@ -82,6 +82,19 @@ public class EventUtils {
         return false;
     }
 
+    public static String containsEqualsIn(MessageEvent event, Iterable<String> tokens) {
+        for (String token : tokens) {
+            for (ArrayMessage arrayMessage : event.getMessage()) {
+                if (arrayMessage.getType().equals(ArrayMessageType.text)) {
+                    if (arrayMessage.getData().getString("text").trim().equals(token)) {
+                        return token;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     public static boolean containsEquals(MessageEvent event, String token) {
         for (ArrayMessage arrayMessage : event.getMessage()) {
             if (arrayMessage.getType().equals(ArrayMessageType.text)) {

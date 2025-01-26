@@ -3,7 +3,6 @@ package top.thevsk.longsong.reborn.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import top.thevsk.longsong.reborn.entity.Cache;
 import top.thevsk.longsong.reborn.entity.event.Event;
 import top.thevsk.longsong.reborn.entity.event.message.GroupMessageEvent;
 import top.thevsk.longsong.reborn.entity.event.message.MessageEvent;
@@ -11,6 +10,7 @@ import top.thevsk.longsong.reborn.entity.event.message.PrivateMessageEvent;
 import top.thevsk.longsong.reborn.entity.event.notice.NoticeEvent;
 import top.thevsk.longsong.reborn.entity.event.notice.PokeNoticeEvent;
 import top.thevsk.longsong.reborn.sender.ApiSender;
+import top.thevsk.longsong.reborn.service.database.SqliteGroupDataService;
 import top.thevsk.longsong.reborn.service.interfaces.IMessageService;
 import top.thevsk.longsong.reborn.service.interfaces.INoticeService;
 import top.thevsk.longsong.reborn.utils.ServiceBeanUtils;
@@ -26,6 +26,8 @@ public class IndexController {
     private ServiceBeanUtils serviceBeanUtils;
     @Autowired
     private ApiSender apiSender;
+    @Autowired
+    private SqliteGroupDataService groupDataService;
 
     @RequestMapping
     public void index(HttpServletRequest request, HttpServletResponse response) {
@@ -41,10 +43,14 @@ public class IndexController {
     }
 
     private void serviceHandle(Event event) {
+        boolean save = false;
         if (event instanceof MessageEvent) {
             for (IMessageService iMessageService : serviceBeanUtils.getMessageServiceList()) {
                 if (event instanceof GroupMessageEvent) {
-                    Cache.setGroupMessage((GroupMessageEvent) event);
+                    if (!save) {
+                        groupDataService.saveGroupMessage((GroupMessageEvent) event);
+                        save = true;
+                    }
                     iMessageService.groupMessage((GroupMessageEvent) event, apiSender);
                 } else if (event instanceof PrivateMessageEvent) {
                     iMessageService.privateMessage((PrivateMessageEvent) event, apiSender);

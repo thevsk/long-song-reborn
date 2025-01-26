@@ -7,6 +7,9 @@ onebot:
 meme:
   server: http://127.0.0.1:2233/memes
 
+sqlite:
+  path: 'G:\01mr\workspace\01work\0000\long-song-reborn\06database'
+
 material:
   web-path: http://127.0.0.1:12301
   local-path: 'G:\01mr\workspace\01work\0000\long-song-reborn\02material'

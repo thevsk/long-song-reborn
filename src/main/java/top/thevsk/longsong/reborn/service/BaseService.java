@@ -2,13 +2,16 @@ package top.thevsk.longsong.reborn.service;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import top.thevsk.longsong.reborn.entity.event.message.MessageEvent;
 import top.thevsk.longsong.reborn.entity.sender.array.ArrayMessage;
 import top.thevsk.longsong.reborn.enums.ArrayMessageType;
+import top.thevsk.longsong.reborn.service.database.SqliteGroupDataService;
 
 import java.io.File;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -18,6 +21,12 @@ public class BaseService {
     private String webPath;
     @Value("${material.temp-path}")
     private String tempPath;
+    @Autowired
+    private SqliteGroupDataService groupDataService;
+
+    public SqliteGroupDataService getGroupDataService() {
+        return groupDataService;
+    }
 
     public File downloadImage(String url, String name) {
         name = StrUtil.isBlank(name) ? UUID.randomUUID().toString().replace("-", "") : name;
@@ -69,5 +78,14 @@ public class BaseService {
         return new ArrayMessage()
                 .setType(ArrayMessageType.text)
                 .setData(new ArrayMessage.Text(text));
+    }
+
+    public ArrayMessage fakeNode(Long qq, String nickname, List<ArrayMessage> node) {
+        return new ArrayMessage().setType(ArrayMessageType.node)
+                .setData(
+                        new ArrayMessage.FakeNode(
+                                qq, nickname, node
+                        )
+                );
     }
 }
