@@ -11,7 +11,6 @@ import top.thevsk.longsong.reborn.service.interfaces.IMessageService;
 import top.thevsk.longsong.reborn.utils.EventUtils;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -32,6 +31,7 @@ public class MemeService extends BaseMemeService implements IMessageService {
             put("撕", new Meme("rip", MemeType.two));
             put("贴", new Meme("rub", MemeType.two));
             put("上坟", new Meme("tomb_yeah", MemeType.two));
+            put("撅", new Meme("little_do", MemeType.two));
 
             put("砍砍你的", new Meme("behead", MemeType.one, true, true));
             put("摸摸", new Meme("petpet", MemeType.one, true, true));
@@ -45,7 +45,6 @@ public class MemeService extends BaseMemeService implements IMessageService {
             put("禁止", new Meme("forbid", MemeType.one, true, true));
             put("抓", new Meme("grab", MemeType.one, true, true));
             put("打胶", new Meme("jerk_off", MemeType.one, true, true));
-            put("撅", new Meme("little_do", MemeType.one, true, true));
             put("双手", new Meme("stretch", MemeType.one, true, true));
             put("添乱", new Meme("add_chaos", MemeType.one, true, true));
             put("上瘾", new Meme("addiction", MemeType.one, true, true));
@@ -270,17 +269,18 @@ public class MemeService extends BaseMemeService implements IMessageService {
         if (meme.isNotAtMe()) {
             if (EventUtils.atMe(event)) return;
         }
-        String memeFile = send(
+        String memeTempFileName = send(
                 meme.getAction(),
                 new File[]{file},
                 null,
                 meme.getArgs()
         );
+        if (StrUtil.isBlank(memeTempFileName)) return;
         sender.sendGroupMsg(
                 event.getGroupId(),
                 new Message()
                         .addMsg(reply(event))
-                        .addMsg(tempImage(memeFile))
+                        .addMsg(tempImage(memeTempFileName))
         );
     }
 
