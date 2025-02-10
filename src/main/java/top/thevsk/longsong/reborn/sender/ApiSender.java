@@ -32,6 +32,10 @@ public class ApiSender {
         return selfNickname;
     }
 
+    public void markAllAsRead() {
+        send("_mark_all_as_read", null);
+    }
+
     public String getGroupMemberName(Long groupId, Long userId) {
         JSONObject groupMemberInfo = getGroupMemberInfo(groupId, userId).getJSONObject("data");
         if (groupMemberInfo == null) return null;
@@ -68,6 +72,7 @@ public class ApiSender {
     }
 
     private JSONObject send(String action, JSONObject data) {
+        data = data == null ? new JSONObject() : data;
         log.info("[发送消息] action {} ", action);
         log.info("[发送消息] data {} ", data.toString());
         MediaType mediaType = MediaType.parse("application/json; charset=utf-8");

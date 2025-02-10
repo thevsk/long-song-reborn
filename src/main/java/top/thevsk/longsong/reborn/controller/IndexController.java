@@ -45,6 +45,7 @@ public class IndexController {
     private void serviceHandle(Event event) {
         boolean save = false;
         if (event instanceof MessageEvent) {
+            apiSender.markAllAsRead();
             for (IMessageService iMessageService : serviceBeanUtils.getMessageServiceList()) {
                 if (event instanceof GroupMessageEvent) {
                     if (!save) {

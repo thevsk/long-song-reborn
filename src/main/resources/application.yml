@@ -1,16 +1,17 @@
 server:
   port: 12301
 
-napcat:
-  start: 'G:\01mr\workspace\01work\0000\long-song-reborn\05qq\NapCat.Shell\NapCatWinBootMain.exe 3527047850'
-  stop: 'taskkill -f -im QQ.exe'
+plug:
+  cmds:
+    - 'taskkill -f -im QQ.exe'
+    - 'taskkill -f -im meme.exe'
+    - 'G:\01mr\workspace\01work\0000\long-song-reborn\05qq\NapCat.Shell\NapCatWinBootMain.exe 3527047850'
+    - 'meme run'
 
 onebot:
   server: http://127.0.0.1:12300
 
 meme:
-  start: 'meme run'
-  stop: 'taskkill -f -im meme.exe'
   server: http://127.0.0.1:2233/memes
 
 sqlite:
